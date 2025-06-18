@@ -1,45 +1,25 @@
-import { Tabs } from 'expo-router';
+import { Stack } from 'expo-router';
 import React from 'react';
-import { Platform } from 'react-native';
 
-import { HapticTab } from '@/components/HapticTab';
-import { IconSymbol } from '@/components/ui/IconSymbol';
-import TabBarBackground from '@/components/ui/TabBarBackground';
-import { Colors } from '@/constants/Colors';
-import { useColorScheme } from '@/hooks/useColorScheme';
-
-export default function TabLayout() {
-  const colorScheme = useColorScheme();
-
+/**
+ * This is the root layout for the app.
+ * It sets up a Stack navigator, which is essential for a login flow.
+ * Each <Stack.Screen /> corresponds to a file in the `app` directory.
+ */
+export default function AppLayout() {
   return (
-    <Tabs
-      screenOptions={{
-        tabBarActiveTintColor: Colors[colorScheme ?? 'light'].tint,
-        headerShown: false,
-        tabBarButton: HapticTab,
-        tabBarBackground: TabBarBackground,
-        tabBarStyle: Platform.select({
-          ios: {
-            // Use a transparent background on iOS to show the blur effect
-            position: 'absolute',
-          },
-          default: {},
-        }),
-      }}>
-      <Tabs.Screen
-        name="index"
-        options={{
-          title: 'Home',
-          tabBarIcon: ({ color }) => <IconSymbol size={28} name="house.fill" color={color} />,
-        }}
-      />
-      <Tabs.Screen
-        name="explore"
-        options={{
-          title: 'Explore',
-          tabBarIcon: ({ color }) => <IconSymbol size={28} name="paperplane.fill" color={color} />,
-        }}
-      />
-    </Tabs>
+    <Stack screenOptions={{ headerShown: false }}>
+      {/* The 'index' screen is the landing page. We hide the header for it. */}
+      <Stack.Screen name="index" options={{ headerShown: false }} />
+      
+      {/* The login screen will have a default header managed by the Stack. */}
+      <Stack.Screen name="login" options={{ title: 'Log In' }} />
+
+      {/* The sign-up screen. */}
+      <Stack.Screen name="signup" options={{ title: 'Create Account' }} />
+
+      {/* The home screen, shown after a successful login. */}
+      <Stack.Screen name="home" options={{ title: 'Home', headerBackVisible: false }} />
+    </Stack>
   );
 }
